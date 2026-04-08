@@ -1,0 +1,147 @@
+---
+title: "Dashboard"
+author: "Kathleen Juarez"
+format: 
+  dashboard:
+      orientation: columns
+      theme: minty
+---
+
+```{r}
+#| label: load-packages and data 
+#install.packages("tidyverse")
+library(tidyverse)
+library(readr)
+library(scales)
+library(ggplot2)
+library(dplyr)
+
+
+# load data
+df <- 
+  read_csv("Traffic acquisition-Session primary channel group (Default Channel Group)(Sheet1)(2).csv")
+
+# colnames(df)
+```
+
+```{r}
+#| label: clean data
+df_clean <- 
+  df %>%
+  rename(channel = `...1`) %>%
+  mutate(sessions = readr::parse_number(Sessions),
+        form_start = readr::parse_number(`Event count (form_start)`),
+        high_intent_rate = form_start / sessions)
+
+```
+
+```{r}
+df2 <-
+  df_clean %>%
+ filter(!is.na(sessions)) %>%
+  filter(sessions >= 5) #controls for small sample sizes
+```
+
+## Direct traffic leads in high-intent engagement
+
+```{r}
+# visualization
+ggplot(df2, aes(x = high_intent_rate, y = reorder(channel, high_intent_rate))) +
+  geom_col(aes(fill = channel == "Direct"), width = 0.7) +
+  geom_text(aes(label = percent(high_intent_rate, accuracy = 0.1)),
+            hjust = -0.1) +
+  scale_fill_manual(values = c("TRUE" = "#E69F00", "FALSE" = "grey70"),
+                    guide = "none") +
+  scale_x_continuous(labels = percent_format(),
+                     expand = expansion(mult = c(0, .2))) +
+  labs(
+    title = "Direct traffic leads in high-intent engagement",
+    subtitle = "Form starts per session",
+    x = "High-intent rate",
+    y = NULL
+  ) +
+  theme_minimal()
+```
+
+### 
+
+::: {.card title="Statistical Comparison"}
+```{r}
+df_plot <- df_clean %>%
+  filter(channel %in% c("Direct", "Organic Search")) %>%
+  mutate(high_intent_rate = form_start / sessions)
+
+
+ggplot(df_plot, aes(x = channel, y = high_intent_rate, fill = channel == "Direct")) +
+  geom_col(width = 0.6) +
+  geom_text(
+    aes(label = percent(high_intent_rate, accuracy = 0.1)),
+    vjust = -0.5,
+    color = "black"
+  ) +
+  scale_fill_manual(
+    values = c("TRUE" = "#0072B2", "FALSE" = "grey70"),
+    guide = "none"
+  ) +
+  scale_y_continuous(
+    labels = percent_format(),
+    limits = c(0, 0.08)
+  ) +
+  labs(
+    title = "Direct traffic shows higher booking intent",
+    subtitle = "Difference is not statistically significant (p = 0.28)",
+    x = NULL,
+    y = "High-intent rate (form_start / sessions)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(color = "black"),
+    axis.title = element_text(color = "black"),
+    plot.title = element_text(face = "bold")
+  )
+```
+::: 
+
+## sessions and high intent rate {width="65%"}
+
+::: {.card title="Sessions and High Intent Rate"}
+```{r}
+df_plot <- 
+  df_clean %>%
+  mutate(label = ifelse(sessions == 0 & high_intent_rate == 0, "Other", channel))
+
+ggplot(df_clean, aes(x = sessions, y = high_intent_rate)) +
+  geom_point(size = 6, color = "#0072B2") +
+
+geom_text(data = subset(df_plot, sessions > 20),
+        aes(label = channel, nudge_x = ifelse(channel == "Organic Social", -40, 0)
+  ),
+  nudge_y = 0.004,
+  vjust = 0,
+  size = 6
+) +
+
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Sessions",
+    y = "High-intent rate"
+  ) +
+  theme_minimal() +
+theme(
+  axis.title.x = element_text(size = 18),
+  axis.title.y = element_text(size = 18),
+  axis.text.x  = element_text(size = 14),
+  axis.text.y  = element_text(size = 14)
+)
+```
+::: 
+
+
+
+
+
+
+
+
