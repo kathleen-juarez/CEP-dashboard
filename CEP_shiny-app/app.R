@@ -6,16 +6,34 @@ library(shiny)
 # Define UI (User Interface) for application that draws a histogram
 ui <- 
   dashboardPage(
-    dashboardHeader(),
+    dashboardHeader(title = "this is the title"),
     
-    dashboardSidebar(),
+    dashboardSidebar(
+      sidebarMenu(
+        menuItem("Monthly Conversion Metrics", tabName = "conversion")
+      )
+    ),
     
-    dashboardBody()
+    dashboardBody(
+      tabItems(
+        tabItem(
+          tabName = "conversion",
+          fluidRow(
+            box(title = "this is a box",
+                status = "primary",
+                solidHeader = TRUE, 
+                collapsible = TRUE,
+                width = 12)
+          )
+        )
+      )
+    )
   )
 
     
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output) {}
+
   
 # Run the application 
 shinyApp(ui = ui, server = server)
