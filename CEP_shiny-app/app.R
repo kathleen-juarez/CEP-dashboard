@@ -10,6 +10,7 @@ ui <-
     
     dashboardSidebar(
       sidebarMenu(
+        selectizeInput("post_type", "Post Type:", choices = unique(postdata.df$Post_Type))
         menuItem("Monthly Conversion Metrics", tabName = "conversion")
       )
     ),
@@ -33,6 +34,9 @@ ui <-
     
 # Define server logic required to draw a histogram
 server <- function(input, output) {}
+reactive({
+  req(input$post_type)
+})
 
   
 # Run the application 
