@@ -86,3 +86,9 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+
+library(rsconnect)
+rsconnect::deployApp(
+  appDir  = '~/Desktop/CEP-dashboard/CEP_shiny-app',
+  appName = 'channel-engagement-explorer'
+)
