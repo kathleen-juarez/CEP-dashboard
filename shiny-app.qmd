@@ -1,16 +1,20 @@
 ---
-title: "Traffic Channel Engagement"
-author: "Kathleen Juarez"
-format: html
-server: shiny
+title: "Shiny Live"
+filters:
+  - shinylive
 ---
 
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 600
+```
+
+
+
 ```{r}
-library(rsconnect)
-rsconnect::deployApp(
-  appDir  = '~/Desktop/CEP-dashboard',
-  appName = 'channel-engagement-explorer'
-)
+#install.packages("shinylive")
+library(shinylive)
 ```
 
 ```{r}
