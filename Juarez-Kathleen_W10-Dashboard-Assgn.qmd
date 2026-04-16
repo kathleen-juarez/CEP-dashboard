@@ -15,7 +15,9 @@ execute:
   message: false
 ---
 
-# Project 1
+# Project 1 - Dashboard
+
+## Link to dashboard
 
 <https://kathleen-juarez.github.io/CEP-dashboard/CEP_dashboard.html>
 
@@ -53,7 +55,7 @@ df2 <-
   filter(sessions >= 5) #controls for small sample sizes
 ```
 
-## Direct traffic leads in high-intent engagement
+Direct traffic leads in high-intent engagement
 
 ``` r
 # visualization
@@ -73,8 +75,6 @@ ggplot(df2, aes(x = high_intent_rate, y = reorder(channel, high_intent_rate))) +
   ) +
   theme_minimal()
 ```
-
-### 
 
 ::: {.card title="Statistical Comparison"}
 ``` r
@@ -115,7 +115,7 @@ ggplot(df_plot, aes(x = channel, y = high_intent_rate, fill = channel == "Direct
 ```
 :::
 
-## sessions and high intent rate {width="65%"}
+sessions and high intent rate {width="65%"}
 
 ::: {.card title="Sessions and High Intent Rate"}
 ``` r
@@ -149,7 +149,9 @@ theme(
 ```
 :::
 
-# Project 2
+# Project 2 - Shiny App
+
+## Link to App:
 
 <https://lqpn2m-kathleen0juarez.shinyapps.io/channel-engagement-explorer/>
 
